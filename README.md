@@ -12,3 +12,7 @@ Contents may include:
 
 <!-- Want to set up a blog and put these in. -->
 
+Plans for tutorials:
+
+- A nb to show threshold theorem using concat.
+- A nb to show GV bound.
