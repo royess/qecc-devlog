@@ -39,6 +39,6 @@ Schedule a weekly meeting on Friday, starting from June 21 in week 3.
 
 - (Running into some problems in decoder tests.)
 - 6-17: report a decoder bug [QuantumSavory/QuantumClifford.jl/issues/291].
-    - later got fixed [QuantumClifford.jl/pull/296].
+    - later got fixed [QuantumSavory/QuantumClifford.jl/pull/296].
 - 6-18: found that `ldpc` incompatable with `numpy`.
     - later got fixed [QuantumSavory/PyQDecoders.jl/pull/12].
