@@ -26,7 +26,6 @@ In total 12+ weeks, with the following plan:
 - Week 11 (August 12 - August 18):
 - Week 12 (August 19 - August 26): **(Final evaluation)**.
 
-
 ## Process tracking
 
 Schedule a weekly meeting on Friday, starting from June 21 in week 3.
@@ -38,4 +37,8 @@ Schedule a weekly meeting on Friday, starting from June 21 in week 3.
 
 ### Week 3 (June 17 - June 23)
 
-- 6-17: Report a decoder bug: [QuantumSavory/QuantumClifford.jl/issues/291].
+- (Running into some problems in decoder tests.)
+- 6-17: report a decoder bug [QuantumSavory/QuantumClifford.jl/issues/291].
+    - later got fixed [QuantumClifford.jl/pull/296/files].
+- 6-18: found that `ldpc` incompatable with `numpy`.
+    - later got fixed [QuantumSavory/PyQDecoders.jl/pull/12].
