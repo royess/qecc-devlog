@@ -17,6 +17,8 @@ In total 12+ weeks, with the following plan:
 - Week 2 (June 10 - June 16): random Clifford circuit codes.
 - Week 3 (June 17 - June 23): hypergraph product, lifted, lifted product.
 - Week 4 (June 24 - June 30): classical codes for product construction.
+    - [Cyclic codes](https://errorcorrectionzoo.org/c/cyclic).
+    - [Quasi-cyclic code](https://errorcorrectionzoo.org/c/quasi_cyclic).
 - Week 5 (July 1 - July 7): generalized bicycle and 2GBA codes.
 - Week 6 (July 8 - July 14): **(Midterm evaluation)**.
 - Week 7 (July 15 - July 21):
