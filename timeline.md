@@ -36,3 +36,4 @@ Schedule a weekly meeting on Friday, starting from June 21 in week 3.
     - later got fixed [QuantumSavory/QuantumClifford.jl/pull/296].
 - 6-18: found that `ldpc` incompatable with `numpy`.
     - later got fixed [QuantumSavory/PyQDecoders.jl/pull/12].
+- 6-20: submit the random circuit PR [QuantumSavory/QuantumClifford.jl/pull/298].
