@@ -8,8 +8,12 @@ In total 12+ weeks, with the following plan:
     - Week 1 (May 28 - June 9): concatenate quantum codes.
     - Week 2 (June 10 - June 16): random Clifford circuit codes.
     - Week 3 (June 17 - June 23): hypergraph product, lifted, lifted product codes.
-    - Week 4 (June 24 - June 30): classial codes: [Cyclic codes](https://errorcorrectionzoo.org/c/cyclic) and [Quasi-cyclic code](https://errorcorrectionzoo.org/c/quasi_cyclic).
-    - Week 5 (July 1 - July 7): classical codes: random codes and Tanner codes, for which we may reuse [QuantumExpander.jl](https://github.com/QuantumSavory/QuantumExpanders.jl).
+    - Week 4 (June 24 - June 30): classial codes.
+        - [Cyclic codes](https://errorcorrectionzoo.org/c/cyclic).
+        - [Quasi-cyclic code](https://errorcorrectionzoo.org/c/quasi_cyclic).
+    - Week 5 (July 1 - July 7): classical codes.
+        - Random codes.
+        - Tanner codes, for which we may reuse [QuantumExpander.jl](https://github.com/QuantumSavory/QuantumExpanders.jl).
     - Week 6 (July 8 - July 14): generalized bicycle, bivariate bicycle code, and 2GBA codes. (Balanced product, if time permits.) **(Midterm evaluation)**.
 - Decoders (`LDPCDecoders.jl`)
     - Week 7 (July 15 - July 21): improve the performance of OSD.
