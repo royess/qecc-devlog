@@ -1,43 +1,12 @@
+import AbstractAlgebra: Ring, RingElem, add!, addeq!, base_ring, base_ring_type,
+    canonical_unit, characteristic, divexact, elem_type, expressify, get_cached!,
+    is_domain_type, is_exact_type, is_unit, isequal, mul!, parent, parent_type, zero!
+import Base:
+    *, +, -, ==, ^, deepcopy_internal, hash, inv, isone, iszero, one, rand, show, zero
+
 using AbstractAlgebra
-
-using Random: Random, SamplerTrivial, GLOBAL_RNG
-using RandomExtensions: RandomExtensions, Make2, AbstractRNG
-
-import AbstractAlgebra: Ring
-import AbstractAlgebra: RingElem
-import AbstractAlgebra: add!
-import AbstractAlgebra: addeq!
-import AbstractAlgebra: base_ring
-import AbstractAlgebra: base_ring_type
-import AbstractAlgebra: canonical_unit
-import AbstractAlgebra: characteristic
-import AbstractAlgebra: divexact
-import AbstractAlgebra: elem_type
-import AbstractAlgebra: expressify
-import AbstractAlgebra: get_cached!
-import AbstractAlgebra: is_domain_type
-import AbstractAlgebra: is_exact_type
-import AbstractAlgebra: is_unit
-import AbstractAlgebra: isequal
-import AbstractAlgebra: mul!
-import AbstractAlgebra: parent
-import AbstractAlgebra: parent_type
-import AbstractAlgebra: zero!
-
-import Base: *
-import Base: +
-import Base: -
-import Base: ==
-import Base: ^
-import Base: deepcopy_internal
-import Base: hash
-import Base: inv
-import Base: isone
-import Base: iszero
-import Base: one
-import Base: rand
-import Base: show
-import Base: zero
+using Random: Random, GLOBAL_RNG, SamplerTrivial
+using RandomExtensions: RandomExtensions, AbstractRNG, Make2
 
 @attributes mutable struct PermGroupRing{T<:RingElement} <: NCRing
     base_ring::Ring
