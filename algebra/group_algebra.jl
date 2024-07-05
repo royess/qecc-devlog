@@ -57,6 +57,7 @@ mutable struct PermGroupRingElem{T<:RingElement} <: NCRingElem
     parent::PermGroupRing{T}
 
     function PermGroupRingElem{T}(coeffs::Dict{<:Perm,T}) where {T<:RingElement}
+        filter!(x -> x[2] != 0, coeffs)
         return new{T}(coeffs)
     end
 
@@ -223,8 +224,8 @@ function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,T}) where {T<:RingElement}
     return r
 end
 
-function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,Union{Integer,Rational,AbstractFloat}}) where {T<:RingElement}
-    r = PermGroupRingElem{T}(map(x -> base_ring(R)(x), coeffs))
+function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,<:Union{Integer,Rational,AbstractFloat}}) where {T<:RingElement}
+    r = PermGroupRingElem{T}(Dict(k => base_ring(R)(v) for (k,v) in coeffs))
     r.parent = R
     return r
 end
