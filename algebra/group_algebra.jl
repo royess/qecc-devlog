@@ -53,10 +53,10 @@ end
 const PermGroupRingElemID = AbstractAlgebra.CacheDictType{NCRing,PermGroupRing}()
 
 mutable struct PermGroupRingElem{T<:RingElement} <: NCRingElem
-    coeffs::Dict{Perm,T}
+    coeffs::Dict{<:Perm,T}
     parent::PermGroupRing{T}
 
-    function PermGroupRingElem{T}(coeffs::Dict{Perm,T}) where {T<:RingElement}
+    function PermGroupRingElem{T}(coeffs::Dict{<:Perm,T}) where {T<:RingElement}
         return new{T}(coeffs)
     end
 
@@ -64,12 +64,17 @@ mutable struct PermGroupRingElem{T<:RingElement} <: NCRingElem
         return new{T}(Dict{Perm,T}())
     end
 
-    function PermGroupRingElem{T}(n::T) where {T<:RingElement}
-        return new{T}(Dict(Perm(parent.l) => n))
+    function PermGroupRingElem{T}(n::T, l::Int) where {T<:RingElement}
+        if iszero(n)
+            coeffs = Dict{Perm,T}()
+        else
+            coeffs = Dict(Perm(l) => n)
+        end
+        return new{T}(coeffs)
     end
 
-    function PermGroupRingElem{T}(p::Perm) where {T<:RingElement}
-        return new{T}(Dict(p => one(T)))
+    function PermGroupRingElem{T}(p::Perm, base_ring::Ring) where {T<:RingElement}
+        return new{T}(Dict(p => one(base_ring)))
     end
 end
 
@@ -88,8 +93,6 @@ parent(f::PermGroupRingElem) = f.parent
 is_domain_type(::Type{PermGroupRingElem{T}}) where {T<:RingElement} = is_domain_type(T)
 
 is_exact_type(::Type{PermGroupRingElem{T}}) where {T<:RingElement} = is_exact_type(T)
-
-# TODO: gen?
 
 function hash(f::PermGroupRingElem, h::UInt)
     r = 0x65125ab8e0cd44ca # TODO: what to do with this?
@@ -112,8 +115,6 @@ iszero(f::PermGroupRingElem) = f == 0
 
 isone(f::PermGroupRingElem) = f == 1
 
-# TODO is_unit, characteristic
-
 # Arithmetic functions
 
 function -(a::PermGroupRingElem{T}) where {T<:RingElement}
@@ -130,7 +131,14 @@ function +(a::PermGroupRingElem{T}, b::PermGroupRingElem{T}) where {T<:RingEleme
         r.coeffs[k] = v
     end
     for (k, v) in b.coeffs
-        r.coeffs[k] += v
+        if haskey(r.coeffs, k)
+            r.coeffs[k] += v
+            if r.coeffs[k] == 0
+                delete!(r.coeffs, k)
+            end
+        else
+            r.coeffs[k] = v
+        end
     end
     return r
 end
@@ -149,6 +157,7 @@ function *(a::PermGroupRingElem{T}, b::PermGroupRingElem{T}) where {T<:RingEleme
             end
         end
     end
+    filter!(x -> x[2] != 0, r.coeffs)
     return r
 end
 
@@ -190,14 +199,13 @@ end
 
 ==(n::T, a::PermGroupRingElem{T}) where {T<:RingElement} = a == n
 
-==(a::PermGroupRingElem{T}, p::Perm) where {T<:RingElement} = length(a.coeffs) == 1 && a.coeffs[p] == 1
+==(a::PermGroupRingElem{T}, p::Perm) where {T<:RingElement} = length(a.coeffs) == 1 && a.coeffs[p] == base_ring(parent(a))(1)
 
 ==(p::Perm, a::PermGroupRingElem{T}) where {T<:RingElement} = a == p
 
 
-# TODO division
-
-# TODO Random generation
+# TODO Some ring interfaces, which are not required in code construction
+# exact division, random generation
 
 # TODO Promotion rules
 
@@ -209,21 +217,33 @@ function (R::PermGroupRing{T})() where {T<:RingElement}
     return r
 end
 
+function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,T}) where {T<:RingElement}
+    r = PermGroupRingElem{T}(coeffs)
+    r.parent = R
+    return r
+end
+
+function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,Union{Integer,Rational,AbstractFloat}}) where {T<:RingElement}
+    r = PermGroupRingElem{T}(map(x -> base_ring(R)(x), coeffs))
+    r.parent = R
+    return r
+end
+
 function (R::PermGroupRing{T})(n::Union{Integer,Rational,AbstractFloat}) where {T<:RingElement}
-    r = PermGroupRingElem{T}(base_ring(R)(n))
+    r = PermGroupRingElem{T}(base_ring(R)(n), R.l)
     r.parent = R
     return r
 end
 
 function (R::PermGroupRing{T})(n::T) where {T<:RingElement}
     base_ring(R) != parent(n) && error("Unable to coerce group ring element")
-    r = PermGroupRingElem{T}(n)
+    r = PermGroupRingElem{T}(n, l)
     r.parent = R
     return r
 end
 
 function (R::PermGroupRing{T})(p::Perm) where {T<:RingElement}
-    r = PermGroupRingElem{T}(p)
+    r = PermGroupRingElem{T}(p, base_ring(R))
     r.parent = R
     return r
 end
@@ -233,4 +253,11 @@ function (R::PermGroupRing{T})(f::PermGroupRingElem{T}) where {T<:RingElement}
     return f
 end
 
-# TODO may need more constructors to remove ambiguities
+# TODO We may need more constructors to remove ambiguities
+
+# Parent constructor
+
+function PermutationGroupRing(R::Ring, l::Int, cached::Bool=true)
+    T = elem_type(R)
+    return PermGroupRing{T}(R, l, cached)
+ end
