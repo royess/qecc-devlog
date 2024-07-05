@@ -225,7 +225,7 @@ function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,T}) where {T<:RingElement}
 end
 
 function (R::PermGroupRing{T})(coeffs::Dict{<:Perm,<:Union{Integer,Rational,AbstractFloat}}) where {T<:RingElement}
-    r = PermGroupRingElem{T}(Dict(k => base_ring(R)(v) for (k,v) in coeffs))
+    r = PermGroupRingElem{T}(Dict(k => base_ring(R)(v) for (k, v) in coeffs))
     r.parent = R
     return r
 end
@@ -261,4 +261,4 @@ end
 function PermutationGroupRing(R::Ring, l::Int, cached::Bool=true)
     T = elem_type(R)
     return PermGroupRing{T}(R, l, cached)
- end
+end
