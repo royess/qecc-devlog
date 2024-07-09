@@ -1,0 +1,19 @@
+ERROR: LoadError: BoundsError: attempt to access 156-element view(::Vector{UInt8}, 176:331) with eltype UInt8 at index [157]
+Stacktrace:
+ [1] throw_boundserror(A::SubArray{UInt8, 1, Vector{UInt8}, Tuple{UnitRange{Int64}}, true}, I::Tuple{Int64})
+   @ Base ./abstractarray.jl:737
+ [2] checkbounds
+   @ ./abstractarray.jl:702 [inlined]
+ [3] getindex
+   @ ./subarray.jl:322 [inlined]
+ [4] naive_encoding_circuit(code::CSS; undoperm::Bool)
+   @ QuantumClifford.ECC ~/Documents/Repos/QuantumClifford.jl/src/ecc/circuits.jl:53
+ [5] naive_encoding_circuit(code::CSS)
+   @ QuantumClifford.ECC ~/Documents/Repos/QuantumClifford.jl/src/ecc/circuits.jl:18
+ [6] top-level scope
+   @ ~/Documents/Repos/qecc-devlog/lifted_product/reproduce_shor_encode_error.jl:26
+ [7] include(fname::String)
+   @ Base.MainInclude ./client.jl:489
+ [8] top-level scope
+   @ REPL[1]:1
+in expression starting at /home/yuxuan/Documents/Repos/qecc-devlog/lifted_product/reproduce_shor_encode_error.jl:26
