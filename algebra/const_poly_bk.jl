@@ -1,49 +1,18 @@
+# ConstPoly.jl : Implements constant polynomials
+
 using AbstractAlgebra
 
 using Random: Random, SamplerTrivial, GLOBAL_RNG
 using RandomExtensions: RandomExtensions, Make2, AbstractRNG
 
-import AbstractAlgebra: Ring
-import AbstractAlgebra: RingElem
-import AbstractAlgebra: add!
-import AbstractAlgebra: addeq!
-import AbstractAlgebra: base_ring
-import AbstractAlgebra: base_ring_type
-import AbstractAlgebra: canonical_unit
-import AbstractAlgebra: characteristic
-import AbstractAlgebra: divexact
-import AbstractAlgebra: elem_type
-import AbstractAlgebra: expressify
-import AbstractAlgebra: get_cached!
-import AbstractAlgebra: is_domain_type
-import AbstractAlgebra: is_exact_type
-import AbstractAlgebra: is_unit
-import AbstractAlgebra: isequal
-import AbstractAlgebra: mul!
-import AbstractAlgebra: parent
-import AbstractAlgebra: parent_type
-import AbstractAlgebra: zero!
+import AbstractAlgebra: parent_type, elem_type, base_ring, parent, is_domain_type,
+       is_exact_type, canonical_unit, isequal, divexact, zero!, mul!, add!, addeq!,
+       get_cached!, is_unit, characteristic, Ring, RingElem, expressify
 
-import Base: *
-import Base: +
-import Base: -
-import Base: ==
-import Base: ^
-import Base: deepcopy_internal
-import Base: hash
-import Base: inv
-import Base: isone
-import Base: iszero
-import Base: one
-import Base: rand
-import Base: show
-import Base: zero
+import Base: show, +, -, *, ^, ==, inv, isone, iszero, one, zero, rand,
+             deepcopy_internal, hash
 
-# import ..test_Ring_interface
-# import ..test_EuclideanRing_interface
-# import ..test_elem
-
-@attributes mutable struct ConstPolyRing{T <: RingElement} <: Ring
+mutable struct ConstPolyRing{T <: RingElement} <: Ring
    base_ring::Ring
 
    function ConstPolyRing{T}(R::Ring, cached::Bool) where T <: RingElement
@@ -70,7 +39,7 @@ parent_type(::Type{ConstPoly{T}}) where T <: RingElement = ConstPolyRing{T}
 
 elem_type(::Type{ConstPolyRing{T}}) where T <: RingElement = ConstPoly{T}
 
-base_ring_type(::Type{ConstPolyRing{T}}) where T <: RingElement = parent_type(T)
+base_ring_type(::Type{ConstPoly{T}}) where T <: RingElement = parent_type(T)
 
 base_ring(R::ConstPolyRing) = R.base_ring::base_ring_type(R)
 
@@ -120,16 +89,16 @@ function show(io::IO, f::ConstPoly)
    print(io, f.c)
 end
 
-# # Expressification (optional)
+# Expressification (optional)
 
-# function expressify(R::ConstPolyRing; context = nothing)
-#    return Expr(:sequence, Expr(:text, "Constant polynomials over "),
-#                           expressify(base_ring(R), context = context))
-# end
+function expressify(R::ConstPolyRing; context = nothing)
+   return Expr(:sequence, Expr(:text, "Constant polynomials over "),
+                          expressify(base_ring(R), context = context))
+end
 
-# function expressify(f::ConstPoly; context = nothing)
-#    return expressify(f.c, context = context)
-# end
+function expressify(f::ConstPoly; context = nothing)
+   return expressify(f.c, context = context)
+end
 
 # Unary operations
 
@@ -267,19 +236,3 @@ function ConstantPolynomialRing(R::Ring, cached::Bool=true)
    T = elem_type(R)
    return ConstPolyRing{T}(R, cached)
 end
-
-# we need only divrem to satsify the
-# Euclidean interface
-
-function Base.divrem(a::ConstPoly{elem_type(ZZ)}, b::ConstPoly{elem_type(ZZ)})
-   parent(a) != parent(b) && error("Incompatible rings")
-   q, r = AbstractAlgebra.divrem(a.c, b.c)
-   return parent(a)(q), parent(a)(r)
-end
-
-####
-
-# function test_elem(R::ConstPolyRing{elem_type(ZZ)})
-#    n = rand(1:999)
-#    return R(rand(-n:n))
-# end
